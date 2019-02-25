@@ -78,7 +78,7 @@ def get_uploaded_images():
     
     rootdir = os.getcwd()
     list = []
-    for subdir, dirs, files in os.walk(rootdir + 'app/static/uploads'): 
+    for subdir, dirs, files in os.walk(rootdir + '/app/static/uploads'): 
         for file in files:
             list.append(file.split("\\")[-1])
     return list[0:]
