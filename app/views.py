@@ -37,6 +37,7 @@ def upload():
     form = UploadForm()
     #if form.validate_on_submit(): # Validate file upload on submit
     if request.method == 'POST' and form.validate_on_submit():
+
         #Get file data and save to your uploads folder
         photo = form.photo.data
         filename = secure_filename(photo.filename)
@@ -67,7 +68,23 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out', 'success')
     return redirect(url_for('home'))
+    
+    
+@app.route('/files')
+def files():
+   return render_template('files.html',images = get_uploaded_images())
 
+def get_uploaded_images():
+
+    rootdir = os.getcwd()
+    list = []
+    for subdir, dirs, files in os.walk(rootdir + 'app/static/uploads'): 
+        for file in files:
+            list.append(os.path.join(subdir, file).split("\\")[-1])
+    return list[1:]
+print(get_uploaded_images())            
+                
+                
 
 ###
 # The functions below should be applicable to all Flask apps.
@@ -89,6 +106,8 @@ def send_text_file(file_name):
     return app.send_static_file(file_dot_text)
 
 
+
+
 @app.after_request
 def add_header(response):
     """
@@ -104,6 +123,8 @@ def add_header(response):
 def page_not_found(error):
     """Custom 404 page."""
     return render_template('404.html'), 404
+    
+
 
 
 if __name__ == '__main__':
